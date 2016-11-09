@@ -1,0 +1,1 @@
+ ssh -i equipe-2.pem ec2-user@52.51.180.114
