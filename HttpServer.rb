@@ -2,7 +2,7 @@ require 'socket' # Provides TCPServer and TCPSocket classes
 
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
-server = TCPServer.new('localhost', 2345)
+server = TCPServer.new('localhost', 80)
 
 # loop infinitely, processing one incoming
 # connection at a time.
