@@ -1,5 +1,7 @@
 require 'socket' # Provides TCPServer and TCPSocket classes
 require 'uri'
+require 'redis'
+
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
 ip = Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
@@ -19,6 +21,9 @@ CONTENT_TYPE_MAPPING = {
 
 # Treat as binary data if content type cannot be found
 DEFAULT_CONTENT_TYPE = 'application/octet-stream'
+
+db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
+db.set("iterator",0)
 
 # This helper function parses the extension of the
 # requested file and then looks up its content type.
@@ -58,6 +63,19 @@ end
 # similar to that of the "Hello World" example
 # shown earlier.
 
+def add(name)
+  db.set(db.get("iterator"), name);
+  db.incr("iterator");
+end 
+
+def getall()
+  x = db.get("iterator").to_i - 1
+  for i in 0..x
+      puts db.get(i)
+  end
+end
+
+    
 loop do
   socket       = server.accept
   request_line = socket.gets
