@@ -64,15 +64,18 @@ end
 # shown earlier.
 
 def add(name)
-  db.set(db.get("iterator"), name);
+  
+  db.set(db.get("iterator"), name.to_s);
   db.incr("iterator");
 end 
 
 def getall()
   x = db.get("iterator").to_i - 1
+  resp ="";
   for i in 0..x
-      puts db.get(i)
+    resp << i.to_s << " : " << db.get(i).to_s << " <br>"     
   end
+  return resp 
 end
 
     
