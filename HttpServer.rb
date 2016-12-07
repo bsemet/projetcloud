@@ -2,7 +2,8 @@ require 'socket' # Provides TCPServer and TCPSocket classes
 
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
-server = TCPServer.new('localhost', 80)
+ip = Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
+server = TCPServer.new(ip.ip_address,80)
 
 # loop infinitely, processing one incoming
 # connection at a time.
