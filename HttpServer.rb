@@ -20,14 +20,28 @@ loop do
   # Log the request to the console for debugging
   STDERR.puts request
 
-  response = "Hello World!\n"
+  response = "<!doctype html>
+    <html>
+    <head>
+      <meta charset='utf-8'>
+      <title>Répertoire des prénoms</title>
+    </head>
+    <body>
+      <h1>Répertoire des prénoms</h1>
+      <p>Entrez votre prénom ici : </p>
+      <form action='todo.js'>
+        <input type='text' name='prenom'>
+      <input type='submit' value='Validez'><br>
+      <p>Projet Cloud par SMAB</p>
+    </body>
+    </html>"
 
   # We need to include the Content-Type and Content-Length headers
   # to let the client know the size and type of data
   # contained in the response. Note that HTTP is whitespace
   # sensitive, and expects each header line to end with CRLF (i.e. "\r\n")
   socket.print "HTTP/1.1 200 OK\r\n" +
-               "Content-Type: text/plain\r\n" +
+               "Content-Type: text/html\r\n" +
                "Content-Length: #{response.bytesize}\r\n" +
                "Connection: close\r\n"
 
