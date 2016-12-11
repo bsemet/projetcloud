@@ -22,7 +22,7 @@ CONTENT_TYPE_MAPPING = {
 # Treat as binary data if content type cannot be found
 DEFAULT_CONTENT_TYPE = 'application/octet-stream'
 
-db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
+db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
 db.set("iterator",0)
 
 # This helper function parses the extension of the
