@@ -77,6 +77,7 @@ def getall()
   for i in 0..x
     resp << i.to_s << " : " << db.get(i).to_s << " <br>"     
   end
+  puts resp 
   return resp 
 end
 
