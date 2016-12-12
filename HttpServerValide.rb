@@ -1,5 +1,11 @@
 require 'socket' # Provides TCPServer and TCPSocket classes
 require 'uri'
+require 'redis' 
+
+
+
+db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
+db.set("iterator",0)
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
 ip = Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
@@ -22,6 +28,23 @@ DEFAULT_CONTENT_TYPE = 'application/octet-stream'
 
 # This helper function parses the extension of the
 # requested file and then looks up its content type.
+
+def add(name)
+  
+  db.set(db.get("iterator"), name.to_s);
+  db.incr("iterator");
+end 
+
+def getall()
+  x = db.get("iterator").to_i - 1
+  resp ="";
+  for i in 0..x
+    resp << i.to_s << " : " << db.get(i).to_s << " <br>"     
+  end
+  puts resp 
+  return resp 
+end
+
 
 def content_type(path)
   ext = File.extname(path).split(".").last
