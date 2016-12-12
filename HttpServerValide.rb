@@ -35,7 +35,7 @@ def add(name)
   db.incr("iterator");
 end 
 
-def getall()
+def listall()
   x = db.get("iterator").to_i - 1
   resp ="";
   for i in 0..x
@@ -110,7 +110,7 @@ loop do
     </head>
     <body>
       <h1>Liste des prénoms</h1>"
-    response.concat ""getall()
+    response.concat ""listall()
       
     response.concat "<a href='index.html'>Retour à l'accueil</a>
       <p>Projet Cloud par SMAB</p>
