@@ -3,7 +3,7 @@ require 'redis'
 require 'uri'
 
 
-db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
+db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
 db.set("iterator",0)
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
