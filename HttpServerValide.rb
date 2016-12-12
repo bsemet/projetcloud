@@ -110,7 +110,7 @@ loop do
     </head>
     <body>
       <h1>Liste des prénoms</h1>"
-    response.concat ""listall()
+    response.concat listall().to_s
       
     response.concat "<a href='index.html'>Retour à l'accueil</a>
       <p>Projet Cloud par SMAB</p>
