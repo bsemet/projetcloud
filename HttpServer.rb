@@ -1,5 +1,5 @@
 require 'socket' # Provides TCPServer and TCPSocket classes
-require "redis"
+
 require 'uri'
 
 
