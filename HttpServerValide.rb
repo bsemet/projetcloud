@@ -37,8 +37,8 @@ def add(name)
 end 
 
 def listall()
-  x = db.get("iterator").to_i - 1
   db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
+  x = db.get("iterator").to_i - 1  
   resp ="";
   for i in 0..x
     resp << i.to_s << " : " << db.get(i).to_s << " <br>"     
