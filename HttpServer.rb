@@ -31,7 +31,8 @@ DEFAULT_CONTENT_TYPE = 'application/octet-stream'
 # requested file and then looks up its content type.
 
 def add(name)
-  name.gsub(/[+]/, '  ')
+  name.gsub(/[+]/, '  ');
+  puts name
   db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
   db.set(db.get("iterator"), name.to_s);
   db.incr("iterator");
