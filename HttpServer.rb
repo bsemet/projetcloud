@@ -1,9 +1,11 @@
 require 'socket' # Provides TCPServer and TCPSocket classes
-require 'redis' 
 require 'uri'
+require 'redis' 
+
 
 
 db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
+
 db.set("iterator",0)
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
@@ -25,10 +27,27 @@ CONTENT_TYPE_MAPPING = {
 # Treat as binary data if content type cannot be found
 DEFAULT_CONTENT_TYPE = 'application/octet-stream'
 
-
-
 # This helper function parses the extension of the
 # requested file and then looks up its content type.
+
+def add(name)
+  name.gsub("+", "  ")
+  db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
+  db.set(db.get("iterator"), name.to_s);
+  db.incr("iterator");
+end 
+
+def listall()
+  db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
+  x = db.get("iterator").to_i - 1  
+  resp ="";
+  for i in 0..x
+    resp << i.to_s << " : " << db.get(i).to_s << " <br>"     
+  end
+  puts resp 
+  return resp 
+end
+
 
 def content_type(path)
   ext = File.extname(path).split(".").last
@@ -65,23 +84,6 @@ end
 # similar to that of the "Hello World" example
 # shown earlier.
 
-def add(name)
-  
-  db.set(db.get("iterator"), name.to_s);
-  db.incr("iterator");
-end 
-
-def getall()
-  x = db.get("iterator").to_i - 1
-  resp ="";
-  for i in 0..x
-    resp << i.to_s << " : " << db.get(i).to_s << " <br>"     
-  end
-  puts resp 
-  return resp 
-end
-
-    
 loop do
   socket       = server.accept
   request_line = socket.gets
@@ -93,7 +95,40 @@ loop do
 
   # Make sure the file exists and is not a directory
   # before attempting to open it.
-  if File.exist?(path) && !File.directory?(path)
+  filename = File.basename(path)
+
+
+  if filename.include? "prenom.html"
+    paramstring = request_line.split('=')[1]     # chop off the verb
+    paramstring = paramstring.split(' ')[0] # chop off the HTTP version
+    paramarray  = paramstring.split('&')    # only handles two parameters
+    
+     add(paramarray[0])
+
+    response = "<!doctype html>
+    <html>
+    <head>
+      <meta charset='utf-8'>
+      <title>Répertoire des prénoms</title>
+    </head>
+    <body>
+      <h1>Liste des prénoms</h1>"
+    response << listall().to_s
+      
+    response << "<a href='index.html'>Retour à l'accueil</a>
+      <p>Projet Cloud par SMAB</p>
+    </body>
+    </html>"
+
+    socket.print "HTTP/1.1 200 OK\r\n" +
+                "Content-Type: text/html\r\n" +
+                "Content-Length: #{response.bytesize}\r\n" +
+                "Connection: close\r\n"
+
+    socket.print "\r\n"
+    socket.print response
+
+  elsif File.exist?(path) && !File.directory?(path)
     File.open(path, "rb") do |file|
       socket.print "HTTP/1.1 200 OK\r\n" +
                    "Content-Type: #{content_type(file)}\r\n" +
