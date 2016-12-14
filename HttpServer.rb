@@ -1,6 +1,6 @@
 require 'socket' # Provides TCPServer and TCPSocket classes
 require 'uri'
-#require 'redis' 
+require 'redis' 
 
 db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
 db.set("iterator",0)
