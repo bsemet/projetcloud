@@ -2,4 +2,4 @@ From ruby
 ADD . /usr/app/
 workdir /usr/app/
 EXPOSE 80
-CMD ["ruby","HttpServerValide.rb"]
+CMD ["ruby","HttpServer.rb"]
