@@ -1,8 +1,8 @@
 require 'socket' # Provides TCPServer and TCPSocket classes
 require 'uri'
-require 'redis' 
+#require 'redis' 
 
-db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
+db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
 db.set("iterator",0)
 # Initialize a TCPServer object that will listen
 # on localhost:2345 for incoming connections.
@@ -29,13 +29,13 @@ DEFAULT_CONTENT_TYPE = 'application/octet-stream'
 
 def add(name)
   name.sub!("+"," ");
-  db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
+  db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
   db.set(db.get("iterator"), name.to_s);
   db.incr("iterator");
 end 
 
 def listall()
-  db = Redis.new( :host => "clouddb", :port => 6379) #Localhost si no docker
+  db = Redis.new( :host => "localhost", :port => 6379) #Localhost si no docker
   x = db.get("iterator").to_i - 1  
   resp ="";
   for i in 0..x
